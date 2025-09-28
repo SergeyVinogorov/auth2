@@ -1,5 +1,5 @@
 import { FC, HTMLInputAutoCompleteAttribute, HTMLInputTypeAttribute } from 'react';
-import { ErrorInput, HandlerMethod } from './shared/types.ts';
+import { ErrorInput, HandlerMethod } from '../types.ts';
 import { ChangeEvent, FocusEvent, FormEvent } from 'react';
 
 interface Props {
@@ -14,6 +14,7 @@ interface Props {
 	onInvalidHandler?: HandlerMethod<FormEvent<HTMLInputElement>>;
 	labelText: string;
 	touched: ErrorInput<boolean>;
+	disabled?: boolean;
 }
 
 export const GeneralInput: FC<Props> = ({
@@ -28,6 +29,7 @@ export const GeneralInput: FC<Props> = ({
 	onInvalidHandler,
 	labelText,
 	touched,
+	disabled,
 }) => {
 	return (
 		<label>
@@ -44,6 +46,7 @@ export const GeneralInput: FC<Props> = ({
 				onChange={onChangeHandler}
 				onInvalid={onInvalidHandler}
 				className={touched[name] ? 'touched' : ''}
+				disabled={disabled}
 			/>
 			<div id={`${name}-error`} role="alert" hidden={!errors[name]} className="error-text">
 				{errors[name]}

@@ -1,7 +1,7 @@
 import { Logo } from './Logo.tsx';
 import { FC } from 'react';
 import { Outlet } from 'react-router-dom';
-import { useDirection } from './shared/useDirection.tsx';
+import { useDirection } from 'shared';
 
 export const Layout: FC = () => {
 	useDirection();

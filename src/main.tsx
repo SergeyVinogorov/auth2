@@ -1,19 +1,28 @@
-import { createBrowserRouter, Navigate, RouterProvider } from 'react-router-dom';
+import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import { createRoot } from 'react-dom/client';
-import { LoginPage } from './LoginPage.tsx';
-import { SignupPage } from './SignupPage.tsx';
-import { Layout } from './Layout.tsx';
 import { StrictMode } from 'react';
 import './index.css';
+import { Layout, ProtectedRoute, RequireRedirect } from 'entities';
+import { DashboardPage, LoginPage, NotFoundPage, SignupPage } from 'pages';
+import { ErrorBoundaryRoute } from 'shared';
 
 export const router = createBrowserRouter([
 	{
 		path: '/',
 		element: <Layout />,
+		errorElement: <ErrorBoundaryRoute />,
 		children: [
-			{ index: true, element: <Navigate to="/login" replace /> },
+			{ index: true, element: <RequireRedirect /> },
 			{ path: 'login', element: <LoginPage /> },
 			{ path: 'signup', element: <SignupPage /> },
+			{
+				element: <ProtectedRoute />,
+				children: [{ path: 'dashboard', element: <DashboardPage /> }],
+			},
+			{
+				path: '*',
+				element: <NotFoundPage />,
+			},
 		],
 	},
 ]);
