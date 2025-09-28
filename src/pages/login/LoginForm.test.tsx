@@ -2,6 +2,7 @@ import { render, screen, fireEvent } from '@testing-library/react';
 import { BrowserRouter } from 'react-router-dom';
 import { describe, it, expect, vi } from 'vitest';
 import { LoginForm } from './LoginForm';
+import * as api from 'shared/lib/mockFetch';
 
 //Mock navigate
 vi.mock('react-router-dom', async () => {
@@ -13,11 +14,7 @@ vi.mock('react-router-dom', async () => {
 });
 
 //Mock fetch util
-vi.mock('shared/lib/mockFetch', () => ({
-	mockFetch: vi.fn((data, shouldFail = false) =>
-		shouldFail ? Promise.reject(new Error('Invalid credentials')) : Promise.resolve(data),
-	),
-}));
+const mockFetchSpy = vi.spyOn(api, 'mockFetch');
 
 describe('LoginForm', () => {
 	it('renders form inputs and buttons', () => {
@@ -54,8 +51,7 @@ describe('LoginForm', () => {
 	});
 
 	it('shows server error when login fails', async () => {
-		const { mockFetch } = await import('shared/lib/mockFetch');
-		mockFetch.mockImplementationOnce(() => Promise.reject(new Error('Invalid credentials')));
+		mockFetchSpy.mockImplementationOnce(() => Promise.reject(new Error('Invalid credentials')));
 		render(
 			<BrowserRouter>
 				<LoginForm />
